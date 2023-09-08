@@ -1,9 +1,9 @@
 #include <stdio.h>
 
 /**
- * main - the function name
+ * main - Entry point
  *
- * Return: returns 0 after code succession
+ * Return: Always 0 (Success)
  */
 
 int main(void)
