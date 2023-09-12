@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * print_last_digit
+ * print_last_digit - print last digit function
  * @i: function parameter
  * Return: k
  */
