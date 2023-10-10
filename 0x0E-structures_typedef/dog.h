@@ -1,6 +1,11 @@
 #ifndef DOG_H
 #define DOG_H
-
+/**
+ * struct dog - structure of element
+ * @name: name of element
+ * @age: element age
+ * @owner: element owner
+ */
 struct dog
 {
 	char *name;
