@@ -6,11 +6,11 @@ section .text
 	extern printf
 
 main:
-	push rdi                ; Save registers that may be modified by printf
+	push rdi
 	mov rdi, format
 	call printf
-	pop rdi                 ; Restore the original value of rdi
+	pop rdi
 
-	mov rax, 60             ; syscall: exit
-	xor rdi, rdi            ; status: 0
+	mov rax, 60
+	xor rdi, rdi
 	syscall
