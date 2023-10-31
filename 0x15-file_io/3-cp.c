@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 {
 	int from, to;
 	ssize_t num_read, num_write;
-	char buffer[BUFSIZE];
+	char num_buffer[BUFSIZE];
 
 	if (argc != 3)
 	{
@@ -72,9 +72,9 @@ int main(int argc, char *argv[])
 	if (to == -1)
 		print_error(99, argv[2], to);
 
-	while ((num_read = read(from, buffer, BUFSIZE) > 0))
+	while ((num_read = read(from, num_buffer, BUFSIZE) > 0))
 	{
-		num_write = write(to, buffer, num_read);
+		num_write = write(to, num_buffer, num_read);
 		if (num_write == -1)
 			print_error(99, argv[2], to);
 	}
