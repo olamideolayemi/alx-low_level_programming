@@ -2,11 +2,8 @@
 #include <stdlib.h>
 #include "main.h"
 
-#define BUFSIZE 1024
-
 char *create_buffer(char *file);
 void close_file(int fd);
-void print_error(int code, const char *file, int fd);
 
 /**
  * create_buffer - reads 1,024 bytes at a time from the file_from to
@@ -17,16 +14,16 @@ void print_error(int code, const char *file, int fd);
 
 char *create_buffer(char *file)
 {
-	char *num_buffer;
+	char *buffer;
 
-	num_buffer = malloc(sizeof(char) * 1024);
+	buffer = malloc(sizeof(char) * 1024);
 
-	if (num_buffer == NULL)
+	if (buffer == NULL)
 	{
 		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file);
 		exit(99);
 	}
-	return (num_buffer);
+	return (buffer);
 }
 
 /**
@@ -55,8 +52,8 @@ void close_file(int fd)
 int main(int argc, char *argv[])
 {
 	int from, to;
-	ssize_t num_read, num_write;
-	char num_buffer[BUFSIZE];
+	int num_read, num_write;
+	char *buffer;
 
 	if (argc != 3)
 	{
@@ -64,41 +61,32 @@ int main(int argc, char *argv[])
 		exit(97);
 	}
 
+	buffer = create_buffer(argv[2]);
 	from = open(argv[1], O_RDONLY);
-	if (from == -1)
-		print_error(98, argv[1], from);
-
+	num_read = read(from, buffer, 1024);
 	to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
-	if (to == -1)
-		print_error(99, argv[2], to);
 
-	while ((num_read = read(from, num_buffer, BUFSIZE) > 0))
-	{
-		num_write = write(to, num_buffer, num_read);
-		if (num_write == -1)
-			print_error(99, argv[2], to);
-	}
-	if (num_read == -1)
-		print_error(98, argv[1], from);
-	if (close(from) == -1 || close(to) == -1)
-		print_error(100, NULL, -1);
+	do {
+		if (from == -1 || num_read == -1)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+			free(buffer);
+			exit(98);
+		}
 
+		num_write = write(to, buffer, num_read);
+		if (to == -1 || num_write == -1)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
+			free(buffer);
+			exit(99);
+		}
+		num_read = read(from, buffer, 1024);
+		to = open(argv[2], O_WRONLY | O_APPEND);
+	} while (num_read > 0);
+
+	free(buffer);
+	close_file(from);
+	close_file(to);
 	return (0);
-}
-
-/**
- * print_error - prints error message
- * @code: exit code
- * @file: file to exit
- * @fd: file description
- */
-void print_error(int code, const char *file, int fd)
-{
-	if (file)
-		dprintf(STDERR_FILENO, "Error: Can't %s from file %s\n",
-				(code == 98) ? "read" : "write", file);
-	else
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
-
-	exit(code);
 }
