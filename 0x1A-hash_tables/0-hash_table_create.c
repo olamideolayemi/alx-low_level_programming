@@ -9,7 +9,7 @@
 
 hash_table_t *hash_table_create(unsigned long int size)
 {
-	unsigned int i  0;
+	unsigned int i = 0;
 	hash_table_t *table;
 	hash_node_t **item_array;
 
@@ -30,7 +30,7 @@ hash_table_t *hash_table_create(unsigned long int size)
 	}
 	while (i < size)
 	{
-		item_arrau[i] = NULL;
+		item_array[i] = NULL;
 		i++;
 	}
 	table->size = size;
