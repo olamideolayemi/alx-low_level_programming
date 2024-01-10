@@ -1,9 +1,11 @@
 #include "hash_tables.h"
 
 /**
- * create_item - a fucntion that creates items for the hashtable array
- * @key: key for the hashtable
- * @value: the equivalent value for the key
+ * create_item - This function creates items for the hashtable array
+ * i.e the key:value pair contained in the hashtable
+ * @key: The key for the hashtable
+ * @value: The equivalent value for the key
+ *
  * Return: The node or the item created
  */
 
@@ -17,6 +19,7 @@ hash_node_t *create_item(const char *key, const char *value)
 		return (NULL);
 	if (strlen(key) == 0 || value == NULL || key == NULL)
 		return (NULL);
+
 
 	item->key = malloc(sizeof(char) * (strlen(key) + 1));
 	if (item->key == NULL)
@@ -40,53 +43,52 @@ hash_node_t *create_item(const char *key, const char *value)
 }
 
 /**
- * hash_table_set - a function that adds an element to the hash table.
- * @ht: is the hash table you want to add or update the key/value to
- * @key: is the key. key can not be an empty string
- * @value: is the value associated with the key.
+ * hash_table_set - This function adds an element to the hash table
+ * @ht: Pointer to the hash table
+ * @key: The key for the new item
+ * @value: The equivalent value of the key for the new item
  *
- * Return: 1 if it succeeded, 0 otherwise
+ * Return: The new node
  */
-
 int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 {
 	hash_node_t *item, *temp;
 	char *new_value;
-	unsigned long int i;
+	unsigned long int idx;
 
 	if (ht == NULL || ht->array == NULL)
 		return (0);
-	item = create_item(key, value);
+	item = create_item(key, value); /* The new item to add to the array */
 	if (item == NULL)
 		return (0);
 
-	i = key_index((const unsigned char *) key, ht->size);
-	temp = ht->array[i];
-	if (temp == NULL)
+	idx = key_index((const unsigned char *) key, ht->size);
+	temp = ht->array[idx];
+	if (temp == NULL) /* Check if the hash table array at this index is free */
 	{
-		if (i >= ht->size)
+		if (idx >= ht->size) /* if idx is out of range */
 		{
 			free(item);
 			return (0);
 		}
-		ht->array[i] = item;
+		ht->array[idx] = item; /* else assign the item to the index */
 		return (1);
 	}
 	else
 	{
 		while (temp != NULL)
-		{
+		{ /* If the current node's key == new node's key, update value */
 			if (strcmp(temp->key, key) == 0)
 			{
 				new_value = strdup(value);
-				free(ht->array[i]->value);
-				ht->array[i]->value = new_value;
+				free(ht->array[idx]->value);
+				ht->array[idx]->value = new_value;
 				return (1);
 			}
 			temp = temp->next;
-		}
-		item->next = ht->array[i];
-		ht->array[i] = item;
+		} /* If curr node's key != new node's key, add at the begnng of d list*/
+		item->next = ht->array[idx];
+		ht->array[idx] = item;
 		return (1);
 	}
 }
