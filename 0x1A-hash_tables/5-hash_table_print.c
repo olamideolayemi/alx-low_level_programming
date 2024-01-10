@@ -4,7 +4,7 @@
  * hash_table_print - Print the hash table
  * @ht: The pointer to the hash table
  *
- * Return: nothing
+ * Return: Nothing
  */
 
 void hash_table_print(const hash_table_t *ht)
