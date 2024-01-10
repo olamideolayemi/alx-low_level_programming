@@ -2,7 +2,8 @@
 
 /**
  * hash_table_delete - This function deletes a hash table
- * @ht: table to be deleted
+ * @ht: The hash table to be deleted
+ *
  * Return: Nothing
  */
 
@@ -28,5 +29,4 @@ void hash_table_delete(hash_table_t *ht)
 	}
 	free(ht->array);
 	free(ht);
-
 }
