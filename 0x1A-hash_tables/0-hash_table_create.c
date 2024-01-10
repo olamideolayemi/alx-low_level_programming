@@ -1,10 +1,10 @@
 #include "hash_tables.h"
 
 /**
- * hash_table_create - The function creates hash tables
- * @size: is the size of array
+ * hash_table_create - The function that creates a hash table
+ * @size: This is the size of the hashTable or the array
  *
- * Return: Returns a pointer to the newly created hash table
+ * Return: Pointer to the newly created hash table
  */
 
 hash_table_t *hash_table_create(unsigned long int size)
@@ -16,11 +16,13 @@ hash_table_t *hash_table_create(unsigned long int size)
 	if (size == 0)
 		return (NULL);
 
+	/* Allocate space for the  table */
 	table = malloc(sizeof(hash_table_t));
 
 	if (table == NULL)
 		return (NULL);
 
+	/* Allocate space for the array */
 	item_array = malloc(sizeof(*item_array) * size);
 
 	if (item_array == NULL)
